@@ -1,0 +1,28 @@
+module = ident ":" do_block
+
+declaration = decl_statement | procedure
+decl_statement = "DECLARE" decl_element { "," decl_element } ";"
+decl_element = ident [ "INITIAL"  number ]
+
+procedure = proc_statement block_end
+proc_statement= ident ":" "PROCEDURE" [ params ] ";"
+params = "(" ident { "," ident } ")"
+
+unit = cond | do_block | do_while | do_iter | statement
+
+cond = "IF" expr "THEN" unit
+     | "IF" expr "THEN" unit "ELSE" unit
+
+do_block = "DO" ";" block_end
+do_while = "DO" "WHILE" expr ";" block_end
+do_iter = "DO" ident "=" expr "TO" expr [ "BY" expr ] ";" block_end
+
+block_end = { declaration } { unit } "END" [ ident ] ";"
+
+statement = ident "=" expr | "CALL" ident [ args ]  | ";" | "RETURN" expr
+args = "(" expr { "," expr } ")"
+
+expr = arithm [ ( "<" | ">" | "<=" | ">=" | "<>" | "=" ) arithm ]
+arithm = term | arithm ( "+" | "-" ) term
+term = factor | term ( "*" | "/") factor
+factor = [ "-" ] ( number | ident [ args ] | "(" expr ")")
