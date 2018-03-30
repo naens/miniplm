@@ -105,7 +105,8 @@ struct value *exec_block_end(struct var_map_node **var_map,
     struct elem_list *list = block_end->val.elem_list;
 
     /* skip declarations */
-    /* TODO: set initial values, procedure parameter values */
+    /* TODO: procedure parameter values */
+    /* TODO: initial: initialize variables */
     while (list != NULL && list->element->type == DECLARATION)
         list = list->next;
 

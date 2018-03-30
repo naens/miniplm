@@ -223,7 +223,7 @@ int decl_fact(FILE *file, struct element *element)
     return 1;
 }
 
-/* initial = "(" "INITIAL" number ")" */
+/* initial = "(" "INITIAL" (string |  number) ")" */
 int initial(FILE *file, struct element *element)
 {
     element->type = INITIAL;
@@ -236,7 +236,8 @@ int initial(FILE *file, struct element *element)
         del_last_elem(file, element);
         return 0;
     }
-    if (!add_term(file, element, NUMBER))
+    if (!add_term(file, element, NUMBER)
+      || !add_term(file, element, STRING_LIT))
     {
         free_list(file, element);
         return 0;
