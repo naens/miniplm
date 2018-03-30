@@ -30,4 +30,4 @@ log_expr = arithm [ rel_op arithm ]
 expr = [not] log_expr { (and | or ) expr }
 arithm = term { ( "+" | "-" | mod ) term }
 term = factor { ( "*" | "/") factor }
-factor = [ "-" ] ( number | ident [ args ] | "(" expr ")")
+factor = [ "-" ] ( string | number | ident [ args ] | "(" expr ")")

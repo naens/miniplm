@@ -500,7 +500,7 @@ int block_end(FILE *file, struct element *element)
     return 1;    
 }
 
-/* statement = ident "=" expr | "CALL" ident [ args ] | ";" | "RETURN" [ expr ] */
+/* statement = ident "=" expr | "CALL" ident [ args ] | "" | "RETURN" [ expr ] */
 int statement(FILE *file, struct element *element)
 {
     element->type = STATEMENT;
@@ -660,14 +660,16 @@ int term(FILE *file, struct element *element)
     return 1;
 }
 
-/* factor = [ "-" ] ( number | ident [ args ] | "(" expr ")") */
+/* factor = [ "-" ] ( string | number | ident [ args ] | "(" expr ")") */
 int factor(FILE *file, struct element *element)
 {
     element->type = FACTOR;
     element->elem_term = NONTERMINAL;
     element->val.elem_list = NULL;
     add_term(file, element, MINUS);
-    if (add_term(file, element, NUMBER))
+    if (add_term(file, element, STRING_LIT))
+        return 1;
+    else if (add_term(file, element, NUMBER))
         return 1;
     else if (add_term(file, element, IDENT))
     {

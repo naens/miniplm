@@ -1,0 +1,7 @@
+test1:
+do;
+    declare a integer;
+    a=10;
+    call write('the value of a is');
+    call writeln(a);
+end test1;

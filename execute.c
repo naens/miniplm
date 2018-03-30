@@ -10,6 +10,12 @@ struct value *exec_block_end(struct var_map_node **var_map,
                     struct element *block_end);
 
 
+struct value *exec_expr(struct var_map_node **var_map,
+                    struct element *element)
+{
+    return NULL;
+}
+
 struct element *find(struct element *element, enum type type)
 {
     struct elem_list *list = element->val.elem_list;
@@ -30,7 +36,7 @@ struct value *exec_cond(struct var_map_node **var_map,
 struct value *exec_do_block(struct var_map_node **var_map,
                     struct element *element)
 {
-    struct element *block_end = find(do_block, BLOCK_END);
+    struct element *block_end = find(element, BLOCK_END);
     return exec_block_end(var_map, block_end);
 }
 
@@ -46,10 +52,28 @@ struct value *exec_do_iter(struct var_map_node **var_map,
     return NULL;
 }
 
+/* statement = ident "=" expr | "CALL" ident [ args ] | ";" | "RETURN" [ expr ] */
 struct value *exec_statement(struct var_map_node **var_map,
                     struct element *element)
 {
-    return NULL;
+    printf("<statement>\n");
+    struct elem_list *list = element->val.elem_list;
+    struct element *sub_element = list->element;
+    switch(sub_element->type) {
+    case IDENT:
+        /* assignment */
+        return NULL;
+    case RW_CALL:
+        /* call */
+        return NULL;
+    case SEMICOLON:
+        return NULL;
+    case RW_RETURN:
+        return exec_expr(var_map, list->next->element);
+        break;
+    default:
+        return NULL;
+    }
 }
 
 /* unit = cond | do_block | do_while | do_iter | statement */
@@ -58,7 +82,7 @@ struct value *exec_unit(struct var_map_node **var_map,
 {
     struct elem_list *list = element->val.elem_list;
     struct element *sub_element = list->element;
-    switch (element->type) {
+    switch (sub_element->type) {
     case COND:
         return exec_cond(var_map, sub_element);
     case DO_BLOCK:
@@ -81,6 +105,7 @@ struct value *exec_block_end(struct var_map_node **var_map,
     struct elem_list *list = block_end->val.elem_list;
 
     /* skip declarations */
+    /* TODO: set initial values, procedure parameter values */
     while (list != NULL && list->element->type == DECLARATION)
         list = list->next;
 

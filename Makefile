@@ -12,8 +12,8 @@ parse_test: read_file.o parse.o print.o
 fill_test: read_ast.o vardata.o parse.o read_file.o
 	$(CC) $(CFLAGS) $^ fill_test.c -o fill_test
 
-execute: read_ast.o vardata.o parse.o read_file.o
-	$(CC) $(CFLAGS) $^ execute.c -o execute
+execute: execute.c read_ast.o vardata.o parse.o read_file.o
+	$(CC) $(CFLAGS) $^ -o execute
 
 test: parse_test
 	@sh runtests.sh
