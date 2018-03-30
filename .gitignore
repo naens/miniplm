@@ -66,3 +66,5 @@ a.out
 *~
 *.o
 test/
+*.json
+tests/
